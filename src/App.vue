@@ -1,10 +1,5 @@
 <template>
   <div class="container">
-    <header class="d-flex justify-content-between mb-3">
-      <h3>Nhân viên</h3>
-      <button class="btn btn-primary" @click="openForm">Thêm mới nhân viên</button>
-    </header>
-
     <EmployeeList
       :employees="employees"
       :searchQuery="searchQuery"
@@ -41,23 +36,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import EmployeeList from './components/EmployeeList.vue';
-import EmployeeForm from './components/EmployeeForm.vue';
-import ConfirmationModal from './components/ConfirmationModal.vue';
+import { ref, computed } from "vue";
+import EmployeeList from "./components/EmployeeList.vue";
+import EmployeeForm from "./components/EmployeeForm.vue";
+import ConfirmationModal from "./components/ConfirmationModal.vue";
 
-const employees = ref(JSON.parse(localStorage.getItem('employees')) || []);
-const searchQuery = ref('');
+const employees = ref(JSON.parse(localStorage.getItem("employees")) || []);
+const searchQuery = ref("");
 const showForm = ref(false);
 const currentEmployee = ref(null);
-const formMode = ref('add');
+const formMode = ref("add");
 const showBlockModal = ref(false);
 const showDeleteModal = ref(false);
 let currentEmail = ref(null);
 
 const openForm = () => {
   showForm.value = true;
-  formMode.value = 'add';
+  formMode.value = "add";
   currentEmployee.value = null;
 };
 
@@ -66,21 +61,23 @@ const closeForm = () => {
 };
 
 const submitForm = (employee) => {
-  if (formMode.value === 'add') {
-    employees.value.push({ ...employee, status: 'active' });
+  if (formMode.value === "add") {
+    employees.value.push({ ...employee, status: "active" });
   } else {
-    const index = employees.value.findIndex(emp => emp.email === employee.email);
+    const index = employees.value.findIndex(
+      (emp) => emp.email === employee.email
+    );
     if (index !== -1) {
       employees.value[index] = { ...employee };
     }
   }
-  localStorage.setItem('employees', JSON.stringify(employees.value));
+  localStorage.setItem("employees", JSON.stringify(employees.value));
   closeForm();
 };
 
 const editEmployee = (employee) => {
   currentEmployee.value = employee;
-  formMode.value = 'edit';
+  formMode.value = "edit";
   showForm.value = true;
 };
 
@@ -90,12 +87,14 @@ const confirmBlock = (email) => {
 };
 
 const blockEmployee = () => {
-  const employee = employees.value.find(emp => emp.email === currentEmail.value);
+  const employee = employees.value.find(
+    (emp) => emp.email === currentEmail.value
+  );
   if (employee) {
-    employee.status = employee.status === 'active' ? 'inactive' : 'active';
+    employee.status = employee.status === "active" ? "inactive" : "active";
   }
   showBlockModal.value = false;
-  localStorage.setItem('employees', JSON.stringify(employees.value));
+  localStorage.setItem("employees", JSON.stringify(employees.value));
 };
 
 const confirmDelete = (email) => {
@@ -104,9 +103,11 @@ const confirmDelete = (email) => {
 };
 
 const deleteConfirmed = () => {
-  employees.value = employees.value.filter(emp => emp.email !== currentEmail.value);
+  employees.value = employees.value.filter(
+    (emp) => emp.email !== currentEmail.value
+  );
   showDeleteModal.value = false;
-  localStorage.setItem('employees', JSON.stringify(employees.value));
+  localStorage.setItem("employees", JSON.stringify(employees.value));
 };
 
 const closeBlockModal = () => {
@@ -118,7 +119,7 @@ const closeDeleteModal = () => {
 };
 
 const refresh = () => {
-  searchQuery.value = '';
+  searchQuery.value = "";
 };
 </script>
 
